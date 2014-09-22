@@ -4,5 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Users/AXRFO/libraries/algs4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/AXRFO/libraries/stdlib.jar"/>
+	<classpathentry kind="lib" path="D:/Users/axrfo/Desktop/Algorithms/Libraries/algs4.jar"/>
+	<classpathentry kind="lib" path="D:/Users/axrfo/Desktop/Algorithms/Libraries/stdlib.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
