@@ -26,9 +26,25 @@ public class Percolation {
 				gride[i][i] = CLOSE;
 			}
 		}
-
 	}
 
+	
+	public void open(int i, int j){
+		//TODO
+	}
+	
+	public boolean isOpen(int i, int j){
+		//TODO
+	}
+	
+	public boolean isFull(int i, int j){
+		//TODO
+	}
+	
+	public boolean percolate(){
+		//TODO
+	}
+	
 	/**
 	 * 
 	 * @param i
@@ -51,5 +67,8 @@ public class Percolation {
 			throw new IndexOutOfBoundsException("Illegal parameter value.");
 		// TODO
 	}
-
+	
+	public static void main(String[] args){
+		//TODO
+	}
 }
