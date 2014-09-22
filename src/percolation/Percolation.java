@@ -15,6 +15,8 @@ public class Percolation {
 	private int opennodes;
 	int[][] site;
 	WeightedQuickUnionUF xxx;
+	private int top = xyTO1D(N, N) + 2;
+	private int bottom = xyTO1D(N, N) + 1;
 
 	/**
 	 * @param N
@@ -26,19 +28,22 @@ public class Percolation {
 			for (int i = 0; i < N; i++) {
 				site[i][i] = CLOSE;
 			}
-			xxx = new WeightedQuickUnionUF(N * N);
-			opennodes = 0;
+			xxx = new WeightedQuickUnionUF((N * N) + 2);
+			setOpennodes(0);
 		}
 	}
 
 	public void open(int i, int j) {
-		// TODO
 		if (isIndexValid(i) && isIndexValid(j)) {
 			if (!isOpen(i, j)) {
 				site[i][j] = OPEN;
-				opennodes++;
-				// compruebo si los nodos adyacentes estan abiertos
-				// si lo estan les uno
+				setOpennodes(getOpennodes() + 1);
+				if (i == 1) {
+					xxx.union(xyTO1D(i, j), bottom);
+				}
+				if (i == N) {
+					xxx.union(xyTO1D(i, j), top);
+				}
 				if (isOpen(i - 1, j)) {
 					xxx.union(xyTO1D(i, j), xyTO1D(i - 1, j));
 				}
@@ -69,7 +74,7 @@ public class Percolation {
 
 	public boolean isFull(int i, int j) {
 		boolean flag;
-		if (xxx.connected(xyTO1D(i, j), 55555)) {
+		if (xxx.connected(xyTO1D(i, j), bottom)) {
 			flag = true;
 		} else {
 			flag = false;
@@ -78,8 +83,7 @@ public class Percolation {
 	}
 
 	public boolean percolate() {
-		// TODO
-		return xxx.connected(3, 5);
+		return xxx.connected(bottom, top);
 	}
 
 	/**
@@ -88,18 +92,28 @@ public class Percolation {
 	 * @return
 	 */
 	private boolean isIndexValid(int i) {
-		if (i <= 0 || i > N)
-			return false;
-		else
-			return true;
+		boolean flag;
+		if (i <= 0 || i > N) {
+			flag = false;
+		} else {
+			flag = true;
+		}
+		return flag;
 	}
 
 	private int xyTO1D(int i, int j) {
-		// TODO
-		return ((i - 1) * N) + (j - 1);
+		return ((i - 1) * N) + j;
 	}
 
 	public static void main(String[] args) {
 		// TODO
+	}
+
+	public int getOpennodes() {
+		return opennodes;
+	}
+
+	public void setOpennodes(int opennodes) {
+		this.opennodes = opennodes;
 	}
 }
