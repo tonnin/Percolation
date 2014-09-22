@@ -14,7 +14,8 @@ public class Percolation {
 	private static int OPEN = 1;
 	private static int FULL = 2;
 	private int opennodes;
-	int[][] gride;
+	int[][] site;
+	WeightedQuickUnionUF xxx;
 
 	/**
 	 * @param N
@@ -24,8 +25,9 @@ public class Percolation {
 			throw new IllegalArgumentException("Illegal parameter value.");
 		} else {
 			for (int i = 0; i < N; i++) {
-				gride[i][i] = CLOSE;
+				site[i][i] = CLOSE;
 			}
+			xxx = new WeightedQuickUnionUF(N * N);
 			opennodes = 0;
 		}
 	}
@@ -34,8 +36,25 @@ public class Percolation {
 		// TODO
 		if (isIndexValid(i) && isIndexValid(j)) {
 			if (!isOpen(i, j)) {
-				gride[i][j] = OPEN;
+				// tengo que comprobar si es full open?
+				// si toca linea de arriba
+				// entonces FULL
+				// sino
 				opennodes++;
+				if (isOpen(i - 1, j)) {
+					xxx.union(xyTO1D(i, j), xyTO1D(i - 1, j));
+				}
+				if (isOpen(i, j - 1)) {
+					xxx.union(xyTO1D(i, j), xyTO1D(i, j - 1));
+				}
+				if (isOpen(i + 1, j)) {
+					xxx.union(xyTO1D(i, j), xyTO1D(i + 1, j));
+				}
+				if (isOpen(i, j + 1)) {
+					xxx.union(xyTO1D(i, j), xyTO1D(i, j + 1));
+				}
+				//si tiene conexion con el nodo raiz entonces FULL si no OPEN
+				site[i][j] = OPEN;
 			}
 			// Should i add the else
 		}
@@ -44,7 +63,7 @@ public class Percolation {
 	public boolean isOpen(int i, int j) {
 		boolean flag = false;
 		if (isIndexValid(i) && isIndexValid(j)) {
-			if (gride[i][j] == OPEN) {
+			if (site[i][j] != CLOSE) {
 				flag = true;
 			} else {
 				flag = false;
@@ -57,7 +76,7 @@ public class Percolation {
 		// TODO
 		boolean flag = false;
 		if (isIndexValid(i) && isIndexValid(j)) {
-			if (gride[i][j] == FULL) {
+			if (site[i][j] == FULL) {
 				flag = true;
 			} else {
 				flag = false;
@@ -92,6 +111,11 @@ public class Percolation {
 		if (!isIndexValid(i) || !isIndexValid(j))
 			throw new IndexOutOfBoundsException("Illegal parameter value.");
 		// TODO
+	}
+
+	private int xyTO1D(int i, int j) {
+		// TODO
+		return 0;
 	}
 
 	public static void main(String[] args) {
