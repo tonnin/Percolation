@@ -12,7 +12,6 @@ public class Percolation {
 	private static int N;
 	private static int CLOSE = 0;
 	private static int OPEN = 1;
-	private static int FULL = 2;
 	private int opennodes;
 	int[][] site;
 	WeightedQuickUnionUF xxx;
@@ -36,11 +35,10 @@ public class Percolation {
 		// TODO
 		if (isIndexValid(i) && isIndexValid(j)) {
 			if (!isOpen(i, j)) {
-				// tengo que comprobar si es full open?
-				// si toca linea de arriba
-				// entonces FULL
-				// sino
+				site[i][j] = OPEN;
 				opennodes++;
+				// compruebo si los nodos adyacentes estan abiertos
+				// si lo estan les uno
 				if (isOpen(i - 1, j)) {
 					xxx.union(xyTO1D(i, j), xyTO1D(i - 1, j));
 				}
@@ -53,10 +51,7 @@ public class Percolation {
 				if (isOpen(i, j + 1)) {
 					xxx.union(xyTO1D(i, j), xyTO1D(i, j + 1));
 				}
-				//si tiene conexion con el nodo raiz entonces FULL si no OPEN
-				site[i][j] = OPEN;
 			}
-			// Should i add the else
 		}
 	}
 
@@ -73,21 +68,18 @@ public class Percolation {
 	}
 
 	public boolean isFull(int i, int j) {
-		// TODO
-		boolean flag = false;
-		if (isIndexValid(i) && isIndexValid(j)) {
-			if (site[i][j] == FULL) {
-				flag = true;
-			} else {
-				flag = false;
-			}
+		boolean flag;
+		if (xxx.connected(xyTO1D(i, j), 55555)) {
+			flag = true;
+		} else {
+			flag = false;
 		}
 		return flag;
 	}
 
 	public boolean percolate() {
 		// TODO
-		return true;
+		return xxx.connected(3, 5);
 	}
 
 	/**
@@ -102,20 +94,9 @@ public class Percolation {
 			return true;
 	}
 
-	/**
-	 * 
-	 */
-	private void cagada() {
-		int i = 0;
-		int j = 0;
-		if (!isIndexValid(i) || !isIndexValid(j))
-			throw new IndexOutOfBoundsException("Illegal parameter value.");
-		// TODO
-	}
-
 	private int xyTO1D(int i, int j) {
 		// TODO
-		return 0;
+		return ((i - 1) * N) + (j - 1);
 	}
 
 	public static void main(String[] args) {
