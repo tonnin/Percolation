@@ -9,7 +9,7 @@ package percolation;
  */
 public class Percolation {
 
-	private static int N = 0;
+	private int N = 0;
 	private static int CLOSE = 0;
 	private static int OPEN = 1;
 	private int opennodes;
@@ -21,13 +21,17 @@ public class Percolation {
 	/**
 	 * @param N
 	 */
-	public Percolation(int N) {
+	public Percolation(int p) {
+		N = p;
+		site = new int[N][N];
 		if (N <= 0) {
 			throw new IllegalArgumentException("Illegal parameter value.");
 		} else {
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
-					site[i][i] = CLOSE;
+					// System.out.print(i);
+					// System.out.print(j);
+					site[i][j] = CLOSE;
 				}
 			}
 			xxx = new WeightedQuickUnionUF((N * N) + 2);
@@ -38,25 +42,34 @@ public class Percolation {
 	public void open(int i, int j) {
 		if (isIndexValid(i) && isIndexValid(j)) {
 			if (!isOpen(i, j)) {
-				site[i][j] = OPEN;
+				site[i - 1][j - 1] = OPEN;
 				setOpennodes(getOpennodes() + 1);
 				if (i == 1) {
 					xxx.union(xyTO1D(i, j), bottom);
 				}
+
 				if (i == N) {
 					xxx.union(xyTO1D(i, j), top);
 				}
-				if (isOpen(i - 1, j)) {
-					xxx.union(xyTO1D(i, j), xyTO1D(i - 1, j));
+				if (i > 1) {
+					if (isOpen(i - 1, j)) {
+						xxx.union(xyTO1D(i, j), xyTO1D(i - 1, j));
+					}
 				}
-				if (isOpen(i, j - 1)) {
-					xxx.union(xyTO1D(i, j), xyTO1D(i, j - 1));
+				if (j > 1) {
+					if (isOpen(i, j - 1)) {
+						xxx.union(xyTO1D(i, j), xyTO1D(i, j - 1));
+					}
 				}
-				if (isOpen(i + 1, j)) {
-					xxx.union(xyTO1D(i, j), xyTO1D(i + 1, j));
+				if (i < N - 1) {
+					if (isOpen(i + 1, j)) {
+						xxx.union(xyTO1D(i, j), xyTO1D(i + 1, j));
+					}
 				}
-				if (isOpen(i, j + 1)) {
-					xxx.union(xyTO1D(i, j), xyTO1D(i, j + 1));
+				if (j < N - 1) {
+					if (isOpen(i, j + 1)) {
+						xxx.union(xyTO1D(i, j), xyTO1D(i, j + 1));
+					}
 				}
 			}
 		}
@@ -65,7 +78,7 @@ public class Percolation {
 	public boolean isOpen(int i, int j) {
 		boolean flag = false;
 		if (isIndexValid(i) && isIndexValid(j)) {
-			if (site[i][j] != CLOSE) {
+			if (site[i - 1][j - 1] != CLOSE) {
 				flag = true;
 			} else {
 				flag = false;
@@ -95,7 +108,8 @@ public class Percolation {
 	 */
 	private boolean isIndexValid(int i) {
 		boolean flag = false;
-		if (i <= 0 || i > N) {
+		i--;
+		if (i < 0 || i > N - 1) {
 			throw new IndexOutOfBoundsException("Error in the index");
 		} else {
 			flag = true;
@@ -117,5 +131,29 @@ public class Percolation {
 
 	public static void main(String[] args) {
 		// TODO
+		Percolation www = new Percolation(10);
+		www.open(1, 1);
+		www.open(1, 1);
+		www.open(2, 1);
+		www.open(3, 1);
+		www.open(4, 2);
+		 www.open(3, 2);
+		for (int i = 0; i < www.N; i++) {
+			for (int j = 0; j < www.N; j++) {
+				System.out.print(www.getNode(i, j));
+			}
+			System.out.println();
+		}
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println(www.isFull(3, 2));
+		System.out.println(www.isFull(4, 2));
+		System.out.println(www.percolate());
+	}
+
+	private int getNode(int i, int j) {
+		return site[i][j];
 	}
 }
