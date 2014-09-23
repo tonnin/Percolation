@@ -9,7 +9,7 @@ package percolation;
  */
 public class Percolation {
 
-	private static int N;
+	private static int N = 0;
 	private static int CLOSE = 0;
 	private static int OPEN = 1;
 	private int opennodes;
@@ -26,7 +26,9 @@ public class Percolation {
 			throw new IllegalArgumentException("Illegal parameter value.");
 		} else {
 			for (int i = 0; i < N; i++) {
-				site[i][i] = CLOSE;
+				for (int j = 0; j < N; j++) {
+					site[i][i] = CLOSE;
+				}
 			}
 			xxx = new WeightedQuickUnionUF((N * N) + 2);
 			setOpennodes(0);
@@ -92,9 +94,9 @@ public class Percolation {
 	 * @return
 	 */
 	private boolean isIndexValid(int i) {
-		boolean flag;
+		boolean flag = false;
 		if (i <= 0 || i > N) {
-			flag = false;
+			throw new IndexOutOfBoundsException("Error in the index");
 		} else {
 			flag = true;
 		}
@@ -105,15 +107,15 @@ public class Percolation {
 		return ((i - 1) * N) + j;
 	}
 
-	public static void main(String[] args) {
-		// TODO
-	}
-
 	public int getOpennodes() {
 		return opennodes;
 	}
 
 	public void setOpennodes(int opennodes) {
 		this.opennodes = opennodes;
+	}
+
+	public static void main(String[] args) {
+		// TODO
 	}
 }
